@@ -1,4 +1,5 @@
 function getComputerChoice(){
+    //Determine a random number between 0 and 3, assign and return rock, paper or scissors based on this value
     let choice = (Math.floor(Math.random()*3));
     if (choice === 0) {
         return "rock";
@@ -10,6 +11,8 @@ function getComputerChoice(){
 }
 
 function playRound(playerSelection, computerSelection) {
+    //Play a single round of rock paper scissors taking the player and computer selection inputs, returning a unique number for each result
+    //A unique number has also been assigned for invalid inputs (4)
     playerSelection = playerSelection.toLowerCase();
     if (playerSelection !== "rock" && playerSelection !== "paper" && playerSelection !== "scissors"){
         return 4;
@@ -23,15 +26,18 @@ function playRound(playerSelection, computerSelection) {
 }
 
 function game() {
+    //Reset the score
     let computerWins = 0;
     let playerWins = 0;
     let roundResult;
 
+    //Play for 5 rounds - rounds that are draws or invalid inputs are to be re-played, hence "i--"
     for (let i = 0; i < 5; i++){
         playerSelection = prompt("Enter \"Rock\", \"Paper\", or \"Scissors\"");
         computerSelection = getComputerChoice();
         console.log("Round: " + i);
         roundResult = playRound(playerSelection, computerSelection)
+        //capitalizeFirstLetter function is run before any console.log commands to ensure text is displayed nicely
         playerSelection = capitalizeFirstLetter(playerSelection);
         computerSelection = capitalizeFirstLetter(computerSelection);
         console.log("You chose: "+playerSelection + ", Computer chose: " + computerSelection);
@@ -49,6 +55,7 @@ function game() {
             i--;
         }
     }
+    //Determine the winner and display appropriate message to console
     console.log("Game over!")
     if (computerWins > playerWins){
         console.log("You Lose! " + playerWins + " to " + computerWins);
@@ -58,6 +65,7 @@ function game() {
 }
 
 function capitalizeFirstLetter(inputText){
+    //Function to take any string input and capitalize the first letter
    return inputText.replace(inputText.charAt(0), inputText.charAt(0).toUpperCase()); 
 }
 
