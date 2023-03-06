@@ -18,49 +18,74 @@ function playRound(playerSelection, computerSelection) {
         return 4;
     }else if (playerSelection === computerSelection){
         return 0;
-    } else if ((playerSelection === "rock" && computerSelection === "scisors") || (playerSelection === "paper" && computerSelection === "rock") || (playerSelection === "scissors" && computerSelection === "paper")) {
+    } else if ((playerSelection === "rock" && computerSelection === "scissors") || (playerSelection === "paper" && computerSelection === "rock") || (playerSelection === "scissors" && computerSelection === "paper")) {
         return 1;
     } else {
         return 2;
     }
 }
 
-function game() {
+function game(playerSelection) {
     //Reset the score
-    let computerWins = 0;
-    let playerWins = 0;
+
     let roundResult;
+    let resultsText;
+    let roundText;
+    let roundDesc;
 
     //Play for 5 rounds - rounds that are draws or invalid inputs are to be re-played, hence "i--"
-    for (let i = 0; i < 5; i++){
-        playerSelection = prompt("Enter \"Rock\", \"Paper\", or \"Scissors\"");
+  //  for (let i = 0; i < 5; i++){
+
+        i++;
         computerSelection = getComputerChoice();
-        console.log("Round: " + i);
+        roundText = "Round: " + i;
+        console.log("player selection:" + playerSelection + ", Computer selection: " + computerSelection);
         roundResult = playRound(playerSelection, computerSelection)
+        console.log(roundResult);
         //capitalizeFirstLetter function is run before any console.log commands to ensure text is displayed nicely
         playerSelection = capitalizeFirstLetter(playerSelection);
         computerSelection = capitalizeFirstLetter(computerSelection);
-        console.log("You chose: "+playerSelection + ", Computer chose: " + computerSelection);
+        roundDesc = "You chose: "+playerSelection + ", Computer chose: " + computerSelection;
         if(roundResult === 0) {
-            console.log("Draw! Round Restart")
+            resultsText = "Draw! Round Restart";
             i--;
         } else if (roundResult === 1) {
-            console.log("You Win this round! " + playerSelection + " beats " + computerSelection);
+            resultsText ="You Win this round! " + playerSelection + " beats " + computerSelection;
             playerWins++;
         } else if (roundResult === 2) {
-            console.log("You Lose this round! " + computerSelection + " beats " + playerSelection);
+            resultsText = "You Lose this round! " + computerSelection + " beats " + playerSelection;
             computerWins++;
         } else {
-            console.log(playerSelection + " is not a valid selection, try again.");
+            resultsText = playerSelection + " is not a valid selection, try again.";
             i--;
         }
-    }
+
+  //  }
     //Determine the winner and display appropriate message to console
-    console.log("Game over!")
-    if (computerWins > playerWins){
-        console.log("You Lose! " + playerWins + " to " + computerWins);
-    } else {
-        console.log("You Win! " + playerWins + " to " + computerWins);
+    // console.log("Game over!")
+    // if (computerWins > playerWins){
+    //     console.log("You Lose! " + playerWins + " to " + computerWins);
+    // } else {
+    //     console.log("You Win! " + playerWins + " to " + computerWins);
+    // }
+    results.textContent = resultsText;
+    roundDescription.textContent = roundDesc;
+    roundNo.textContent = roundText;
+    container.appendChild(roundNo);
+    container.appendChild(roundDescription);
+    container.appendChild(results);
+
+    if (i === 5){
+        console.log("This is running");
+        if (computerWins > playerWins){
+            finalResults.textContent = "You Lose! Computer won " + computerWins + " times, you won " + playerWins + " times! Bad luck!";
+        } else {
+            finalResults.textContent = "You Win! Computer won " + computerWins + " times, you won " + playerWins + " times! Well done!";
+        }
+        finalResults.style.fontSize = "25px";
+        container.appendChild(finalResults);
+        i++;
+    
     }
 }
 
@@ -69,10 +94,33 @@ function capitalizeFirstLetter(inputText){
    return inputText.replace(inputText.charAt(0), inputText.charAt(0).toUpperCase()); 
 }
 
-let inputText = "string";
+let inputText;
 let playerSelection;
 let computerSelection;
 let roundResult;
-console.log("Lets play Rock Paper Scissors, Best of 5");
-game();
+let i = 0; 
+let computerWins = 0;
+let playerWins = 0;
+const container = document.querySelector('div');
+const results = document.createElement('div');
+const roundNo = document.createElement('div');
+const roundDescription = document.createElement('div');
+const finalResults = document.createElement('div');
+//console.log("Lets play Rock Paper Scissors, Best of 5");
+//game();
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        if (i<5){
+            console.log(button.id);
+            game(button.id);
+        }
+    })
+})
+
+
+
+
 
