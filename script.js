@@ -1,3 +1,7 @@
+function capitalizeFirstLetter(inputText){
+    //Function to take any string input and capitalize the first letter
+   return inputText.replace(inputText.charAt(0), inputText.charAt(0).toUpperCase()); 
+}
 function getComputerChoice(){
     //Determine a random number between 0 and 3, assign and return rock, paper or scissors based on this value
     let choice = (Math.floor(Math.random()*3));
@@ -9,7 +13,6 @@ function getComputerChoice(){
         return "scissors";
     }    
 }
-
 function playRound(playerSelection, computerSelection) {
     //Play a single round of rock paper scissors taking the player and computer selection inputs, returning a unique number for each result
     //A unique number has also been assigned for invalid inputs (4)
@@ -24,21 +27,16 @@ function playRound(playerSelection, computerSelection) {
         return 2;
     }
 }
-
 function game(playerSelection) {
-    //Reset the score
 
     let roundResult;
     let resultsText;
     let roundText;
     let roundDesc;
 
-    //Play for 5 rounds - rounds that are draws or invalid inputs are to be re-played, hence "i--"
-  //  for (let i = 0; i < 5; i++){
-
-        i++;
+        rounds++;
         computerSelection = getComputerChoice();
-        roundText = "Round: " + i;
+        roundText = "Round: " + rounds + "  |  Score: Player " + playerWins + ", Computer " + computerWins;
         console.log("player selection:" + playerSelection + ", Computer selection: " + computerSelection);
         roundResult = playRound(playerSelection, computerSelection)
         console.log(roundResult);
@@ -47,8 +45,7 @@ function game(playerSelection) {
         computerSelection = capitalizeFirstLetter(computerSelection);
         roundDesc = "You chose: "+playerSelection + ", Computer chose: " + computerSelection;
         if(roundResult === 0) {
-            resultsText = "Draw! Round Restart";
-            i--;
+            resultsText = "Draw!";
         } else if (roundResult === 1) {
             resultsText ="You Win this round! " + playerSelection + " beats " + computerSelection;
             playerWins++;
@@ -57,65 +54,66 @@ function game(playerSelection) {
             computerWins++;
         } else {
             resultsText = playerSelection + " is not a valid selection, try again.";
-            i--;
         }
 
-  //  }
-    //Determine the winner and display appropriate message to console
-    // console.log("Game over!")
-    // if (computerWins > playerWins){
-    //     console.log("You Lose! " + playerWins + " to " + computerWins);
-    // } else {
-    //     console.log("You Win! " + playerWins + " to " + computerWins);
-    // }
     results.textContent = resultsText;
     roundDescription.textContent = roundDesc;
     roundNo.textContent = roundText;
     container.appendChild(roundNo);
     container.appendChild(roundDescription);
     container.appendChild(results);
-
-    if (i === 5){
-        console.log("This is running");
-        if (computerWins > playerWins){
-            finalResults.textContent = "You Lose! Computer won " + computerWins + " times, you won " + playerWins + " times! Bad luck!";
-        } else {
-            finalResults.textContent = "You Win! Computer won " + computerWins + " times, you won " + playerWins + " times! Well done!";
-        }
-        finalResults.style.fontSize = "25px";
-        container.appendChild(finalResults);
-        i++;
-    
-    }
 }
 
-function capitalizeFirstLetter(inputText){
-    //Function to take any string input and capitalize the first letter
-   return inputText.replace(inputText.charAt(0), inputText.charAt(0).toUpperCase()); 
+function resetGame(){
+rounds = 0;
+playerWins = 0;
+computerWins = 0;
+//check if there are any children to be removed, this will prevent throwing DOMException error
+if (container.childElementCount > 1) {
+    container.removeChild(roundNo);
+    container.removeChild(roundDescription);
+    container.removeChild(results);
+    if (container.lastChild === finalResults) {
+        container.removeChild(finalResults);
+        }
+    }
 }
 
 let inputText;
 let playerSelection;
 let computerSelection;
 let roundResult;
-let i = 0; 
+let rounds = 0; 
 let computerWins = 0;
 let playerWins = 0;
+
 const container = document.querySelector('div');
 const results = document.createElement('div');
 const roundNo = document.createElement('div');
 const roundDescription = document.createElement('div');
 const finalResults = document.createElement('div');
-//console.log("Lets play Rock Paper Scissors, Best of 5");
-//game();
 
 const buttons = document.querySelectorAll('button');
 
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        if (i<5){
-            console.log(button.id);
-            game(button.id);
+        if (button.id === "reset"){
+            resetGame();
+        } else {
+            if (computerWins<5 && playerWins <5){
+                console.log(button.id);
+                game(button.id);
+            } 
+            if (computerWins >= 5 || playerWins >=5){
+                //add button to reset game
+                if (computerWins > playerWins){
+                    finalResults.textContent = "You Lose! Computer won " + computerWins + " times, you won " + playerWins + " times! Bad luck!";
+                } else {
+                    finalResults.textContent = "You Win! Computer won " + computerWins + " times, you won " + playerWins + " times! Well done!";
+                }
+                finalResults.style.fontSize = "25px";
+                container.appendChild(finalResults);
+            }
         }
     })
 })
